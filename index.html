@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>TradeDemo</title>
+<title>TradeDemo — Paper Trading Simulator</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@ body{
 button,input,textarea{font:inherit}
 button{cursor:pointer}
 .hidden{display:none!important}
-.app{max-width:700px;margin:auto;min-height:100vh;padding-bottom:85px}
+.app{max-width:720px;margin:auto;min-height:100vh;padding-bottom:88px}
 
 .header{
   height:70px;padding:14px 18px;display:flex;
@@ -48,14 +48,15 @@ button{cursor:pointer}
   border-radius:18px;padding:17px;margin-bottom:14px
 }
 .balance-card{
-  background:linear-gradient(145deg,#121923,#0d1219);
-  border:1px solid #222b36;border-radius:22px;
+  background:linear-gradient(145deg,#14221e,#0d1219);
+  border:1px solid #26382f;border-radius:22px;
   padding:22px;margin-bottom:18px
 }
 .balance-label{color:#8d98a7;font-size:13px}
 .balance{font-size:34px;font-weight:800;margin:8px 0}
 .green{color:#36d399!important}
 .red{color:#ff6675!important}
+.yellow{color:#f3c969!important}
 
 .section-title{font-size:17px;font-weight:700;margin-bottom:13px}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -65,6 +66,16 @@ button{cursor:pointer}
 }
 .stat-label{color:#7e8998;font-size:12px}
 .stat-value{margin-top:7px;font-size:17px;font-weight:700}
+
+.market-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px
+}
+.market-card{
+  background:#0b0f15;border:1px solid #202731;
+  padding:14px;border-radius:15px
+}
+.market-name{font-weight:700}
+.market-value{font-size:17px;font-weight:800;margin-top:8px}
 
 .stock{
   display:flex;justify-content:space-between;align-items:center;
@@ -80,6 +91,13 @@ button{cursor:pointer}
 .stock-name{font-weight:700}
 .stock-symbol{color:#7d8795;font-size:12px;margin-top:4px}
 .stock-price{text-align:right;font-weight:700}
+
+.badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:5px 8px;border-radius:8px;font-size:10px;font-weight:700
+}
+.badge.green-bg{background:#12352a;color:#36d399}
+.badge.red-bg{background:#38191e;color:#ff6675}
 
 .search{
   width:100%;background:#11161e;border:1px solid #252d38;
@@ -114,7 +132,7 @@ canvas{width:100%;height:100%}
 
 .bottom-nav{
   position:fixed;bottom:0;left:50%;transform:translateX(-50%);
-  width:100%;max-width:700px;height:73px;background:#0c1016;
+  width:100%;max-width:720px;height:73px;background:#0c1016;
   border-top:1px solid #222a34;display:grid;
   grid-template-columns:repeat(6,1fr);z-index:50
 }
@@ -132,7 +150,7 @@ canvas{width:100%;height:100%}
   z-index:100
 }
 .modal-box{
-  width:100%;max-width:700px;background:#10151c;
+  width:100%;max-width:720px;background:#10151c;
   border:1px solid #29323e;border-radius:25px 25px 0 0;padding:22px
 }
 .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
@@ -159,18 +177,51 @@ canvas{width:100%;height:100%}
   display:flex;gap:13px;align-items:center;
   padding:15px 0;border-bottom:1px solid #202731;cursor:pointer
 }
+.lesson:last-child{border-bottom:0}
 .lesson-number{
-  min-width:38px;height:38px;border-radius:11px;
+  min-width:40px;height:40px;border-radius:11px;
   background:#17201e;color:#36d399;
   display:flex;align-items:center;justify-content:center;font-weight:800
 }
 .lesson-title{font-weight:700}
 .lesson-level{color:#7e8997;font-size:12px;margin-top:4px}
+.lesson-arrow{margin-left:auto;color:#657181}
+
+.lesson-detail-title{font-size:26px;line-height:1.25}
+.lesson-content{color:#c5ccd5;line-height:1.75;font-size:14px;margin-top:14px}
+.lesson-content strong{color:#fff}
+.lesson-image{
+  margin:16px 0;background:#090d13;border:1px solid #202833;
+  border-radius:16px;padding:10px;overflow:hidden
+}
+.lesson-image svg{display:block;width:100%;height:auto}
+.example-box{
+  background:#0b1512;border:1px solid #214237;
+  border-radius:15px;padding:15px;line-height:1.7;
+  color:#c7d1cb
+}
+.quiz-option{
+  width:100%;text-align:left;border:1px solid #29333f;
+  background:#0c1117;color:#e9edf1;padding:13px;
+  border-radius:12px;margin-top:9px
+}
+.quiz-option:hover{border-color:#36d399}
+.quiz-option.correct{border-color:#36d399;background:#103127}
+.quiz-option.wrong{border-color:#ff6675;background:#34191e}
+.quiz-result{min-height:20px;margin-top:12px;font-size:13px}
+.lesson-nav{
+  display:flex;gap:8px;align-items:center;margin-top:15px
+}
+.lesson-nav .filter{flex:1}
+.lesson-nav .primary-btn{
+  width:auto;flex:1;margin-top:0
+}
 
 .setting{
   display:flex;align-items:center;justify-content:space-between;
   padding:17px 0;border-bottom:1px solid #202731
 }
+.setting:last-child{border-bottom:0}
 .setting-left{display:flex;align-items:center;gap:13px}
 .setting-icon{
   width:40px;height:40px;border-radius:12px;background:#171d26;
@@ -184,7 +235,7 @@ canvas{width:100%;height:100%}
   height:8px;background:#202832;border-radius:20px;
   overflow:hidden;margin-top:10px
 }
-.xp-fill{height:100%;width:0;background:#36d399}
+.xp-fill{height:100%;width:0;background:#36d399;transition:.3s}
 
 .order-row{
   display:flex;justify-content:space-between;align-items:center;
@@ -242,9 +293,7 @@ canvas{width:100%;height:100%}
 }
 .error{color:#ff6675;font-size:12px;margin:5px 0}
 
-.profile-card{
-  display:flex;align-items:center;gap:15px
-}
+.profile-card{display:flex;align-items:center;gap:15px}
 .avatar{
   width:58px;height:58px;border-radius:18px;
   background:#1b2823;color:#36d399;
@@ -252,10 +301,19 @@ canvas{width:100%;height:100%}
   font-size:24px;font-weight:800
 }
 
+.hero-mini{
+  padding:16px;border-radius:16px;
+  background:linear-gradient(135deg,#101b18,#11151c);
+  border:1px solid #24382f;margin-bottom:14px
+}
+.hero-mini-title{font-size:14px;color:#8d98a7}
+.hero-mini-value{font-size:24px;font-weight:800;margin-top:5px}
+
 @media(max-width:430px){
   .content{padding:15px}
   .balance{font-size:30px}
   .nav-item{font-size:9px}
+  .lesson-nav{flex-wrap:wrap}
 }
 </style>
 </head>
@@ -265,76 +323,62 @@ canvas{width:100%;height:100%}
 <!-- ================= AUTH ================= -->
 
 <div id="authApp" class="auth">
+<div class="auth-box">
 
-  <div class="auth-box">
+<div class="auth-logo">Trade<span>Demo</span></div>
+<div class="auth-sub">Paper trading learning simulator</div>
 
-    <div class="auth-logo">Trade<span>Demo</span></div>
-    <div class="auth-sub">Paper trading learning simulator</div>
+<div id="loginForm">
 
-    <div id="loginForm">
+<h2 style="margin-bottom:18px">Welcome back 👋</h2>
 
-      <h2 style="margin-bottom:18px">Welcome back 👋</h2>
+<label class="auth-label">Email or Phone</label>
+<input id="loginIdentity" class="auth-input" placeholder="Email or phone">
 
-      <label class="auth-label">Email or Phone</label>
-      <input id="loginIdentity" class="auth-input"
-             placeholder="Email or phone">
+<label class="auth-label">Password</label>
+<input id="loginPassword" class="auth-input" type="password" placeholder="Password">
 
-      <label class="auth-label">Password</label>
-      <input id="loginPassword" class="auth-input"
-             type="password" placeholder="Password">
+<div id="loginError" class="error"></div>
 
-      <div id="loginError" class="error"></div>
+<button class="auth-btn" onclick="login()">Login</button>
 
-      <button class="auth-btn" onclick="login()">
-        Login
-      </button>
+<div class="auth-switch">
+Don't have an account?
+<button onclick="showRegister()">Sign Up</button>
+</div>
 
-      <div class="auth-switch">
-        Don't have an account?
-        <button onclick="showRegister()">Sign Up</button>
-      </div>
+</div>
 
-    </div>
+<div id="registerForm" class="hidden">
 
+<h2 style="margin-bottom:18px">Create Account</h2>
 
-    <div id="registerForm" class="hidden">
+<label class="auth-label">Full Name</label>
+<input id="regName" class="auth-input" placeholder="Your full name">
 
-      <h2 style="margin-bottom:18px">Create Account</h2>
+<label class="auth-label">Email</label>
+<input id="regEmail" class="auth-input" type="email" placeholder="you@example.com">
 
-      <label class="auth-label">Full Name</label>
-      <input id="regName" class="auth-input"
-             placeholder="Your full name">
+<label class="auth-label">Phone Number</label>
+<input id="regPhone" class="auth-input" type="tel" placeholder="+91 XXXXX XXXXX">
 
-      <label class="auth-label">Email</label>
-      <input id="regEmail" class="auth-input"
-             type="email" placeholder="you@example.com">
+<label class="auth-label">Password</label>
+<input id="regPassword" class="auth-input" type="password" placeholder="Create password">
 
-      <label class="auth-label">Phone Number</label>
-      <input id="regPhone" class="auth-input"
-             type="tel" placeholder="+91 XXXXX XXXXX">
+<label class="auth-label">Confirm Password</label>
+<input id="regConfirm" class="auth-input" type="password" placeholder="Confirm password">
 
-      <label class="auth-label">Password</label>
-      <input id="regPassword" class="auth-input"
-             type="password" placeholder="Create password">
+<div id="registerError" class="error"></div>
 
-      <label class="auth-label">Confirm Password</label>
-      <input id="regConfirm" class="auth-input"
-             type="password" placeholder="Confirm password">
+<button class="auth-btn" onclick="register()">Create Account</button>
 
-      <div id="registerError" class="error"></div>
+<div class="auth-switch">
+Already have an account?
+<button onclick="showLogin()">Login</button>
+</div>
 
-      <button class="auth-btn" onclick="register()">
-        Create Account
-      </button>
-
-      <div class="auth-switch">
-        Already have an account?
-        <button onclick="showLogin()">Login</button>
-      </div>
-
-    </div>
-
-  </div>
+</div>
+</div>
 </div>
 
 
@@ -344,629 +388,761 @@ canvas{width:100%;height:100%}
 
 <header class="header">
 
-  <div class="logo">Trade<span>Demo</span></div>
+<div class="logo">Trade<span>Demo</span></div>
 
-  <div class="header-right">
+<div class="header-right">
 
-    <button class="icon-btn" onclick="showScreen('watchlist')">
-      <span class="material-symbols-rounded">star</span>
-    </button>
+<button class="icon-btn" onclick="showScreen('watchlist')">
+<span class="material-symbols-rounded">star</span>
+</button>
 
-    <button class="icon-btn" onclick="showScreen('settings')">
-      <span class="material-symbols-rounded">settings</span>
-    </button>
+<button class="icon-btn" onclick="showScreen('settings')">
+<span class="material-symbols-rounded">settings</span>
+</button>
 
-  </div>
-
+</div>
 </header>
 
 
-<!-- HOME -->
+<!-- ================= HOME ================= -->
 
 <main id="homeScreen" class="content">
 
-  <div class="title-row">
-    <div>
-      <div class="title">Dashboard</div>
-      <div class="subtitle" id="welcomeText">Virtual trading simulator</div>
-    </div>
-  </div>
+<div class="title-row">
+<div>
+<div class="title">Dashboard</div>
+<div class="subtitle" id="welcomeText">Virtual trading simulator</div>
+</div>
+</div>
 
-  <div class="card profile-card">
+<div class="card profile-card">
+<div class="avatar" id="avatar">T</div>
+<div>
+<b id="profileName">Trader</b>
+<div class="subtitle" id="profileEmail"></div>
+</div>
+</div>
 
-    <div class="avatar" id="avatar">T</div>
+<div class="balance-card">
 
-    <div>
-      <b id="profileName">Trader</b>
-      <div class="subtitle" id="profileEmail"></div>
-    </div>
+<div class="balance-label">Virtual Balance</div>
+<div class="balance" id="balanceValue">₹1,00,000.00</div>
+<div id="totalProfit" class="green">+₹0.00</div>
 
-  </div>
+</div>
 
-  <div class="balance-card">
+<div class="card">
 
-    <div class="balance-label">Virtual Balance</div>
-    <div class="balance" id="balanceValue">₹1,00,000.00</div>
-    <div id="totalProfit" class="green">+₹0.00</div>
+<div class="section-title">Market Overview</div>
 
-  </div>
+<div class="market-grid">
 
-  <div class="card">
+<div class="market-card">
+<div class="market-name">NIFTY 50</div>
+<div class="market-value">25,120</div>
+<div class="green" style="font-size:12px;margin-top:5px">▲ +0.42%</div>
+</div>
 
-    <div class="section-title">Your Statistics</div>
+<div class="market-card">
+<div class="market-name">SENSEX</div>
+<div class="market-value">82,450</div>
+<div class="green" style="font-size:12px;margin-top:5px">▲ +0.31%</div>
+</div>
 
-    <div class="stats">
+<div class="market-card">
+<div class="market-name">BANK NIFTY</div>
+<div class="market-value">56,200</div>
+<div class="red" style="font-size:12px;margin-top:5px">▼ -0.18%</div>
+</div>
 
-      <div class="stat">
-        <div class="stat-label">Invested</div>
-        <div class="stat-value" id="investedValue">₹0</div>
-      </div>
+<div class="market-card">
+<div class="market-name">INDIA VIX</div>
+<div class="market-value">13.42</div>
+<div class="green" style="font-size:12px;margin-top:5px">▼ -1.20%</div>
+</div>
 
-      <div class="stat">
-        <div class="stat-label">Portfolio</div>
-        <div class="stat-value" id="portfolioValue">₹0</div>
-      </div>
+</div>
+</div>
 
-      <div class="stat">
-        <div class="stat-label">Orders</div>
-        <div class="stat-value" id="ordersValue">0</div>
-      </div>
+<div class="card">
 
-      <div class="stat">
-        <div class="stat-label">XP</div>
-        <div class="stat-value" id="xpValue">0 XP</div>
-      </div>
+<div class="section-title">Your Statistics</div>
 
-    </div>
-  </div>
+<div class="stats">
 
-  <div class="card">
+<div class="stat">
+<div class="stat-label">Invested</div>
+<div class="stat-value" id="investedValue">₹0</div>
+</div>
 
-    <div class="section-title">Popular Markets</div>
+<div class="stat">
+<div class="stat-label">Portfolio</div>
+<div class="stat-value" id="portfolioValue">₹0</div>
+</div>
 
-    <div id="homeStocks"></div>
+<div class="stat">
+<div class="stat-label">Orders</div>
+<div class="stat-value" id="ordersValue">0</div>
+</div>
 
-  </div>
+<div class="stat">
+<div class="stat-label">XP</div>
+<div class="stat-value" id="xpValue">0 XP</div>
+</div>
 
-  <div class="card">
+</div>
+</div>
 
-    <div class="section-title">Learning Progress</div>
+<div class="card">
 
-    <div style="display:flex;justify-content:space-between;font-size:13px">
-      <span id="homeLessonCount">0 / 30</span>
-      <span id="homeLessonPercent">0%</span>
-    </div>
+<div class="section-title">Top Gainers</div>
+<div id="homeGainers"></div>
 
-    <div class="xp-bar">
-      <div class="xp-fill" id="homeLearnBar"></div>
-    </div>
+</div>
 
-  </div>
+<div class="card">
+
+<div class="section-title">Top Losers</div>
+<div id="homeLosers"></div>
+
+</div>
+
+<div class="card">
+
+<div class="section-title">Most Active</div>
+<div id="homeActive"></div>
+
+</div>
+
+<div class="card">
+
+<div class="section-title">Learning Progress</div>
+
+<div style="display:flex;justify-content:space-between;font-size:13px">
+<span id="homeLessonCount">0 / 30</span>
+<span id="homeLessonPercent">0%</span>
+</div>
+
+<div class="xp-bar">
+<div class="xp-fill" id="homeLearnBar"></div>
+</div>
+
+</div>
 
 </main>
 
 
-<!-- MARKETS -->
+<!-- ================= MARKETS ================= -->
 
 <main id="marketsScreen" class="content hidden">
 
-  <div class="title-row">
-    <div>
-      <div class="title">Markets</div>
-      <div class="subtitle">Simulated market data</div>
-    </div>
-  </div>
+<div class="title-row">
+<div>
+<div class="title">Markets</div>
+<div class="subtitle">Simulated market data</div>
+</div>
+</div>
 
-  <input id="searchInput" class="search"
-         placeholder="Search company or symbol..."
-         oninput="searchStocks()">
+<input id="searchInput" class="search"
+placeholder="Search company or symbol..."
+oninput="searchStocks()">
 
-  <div class="card">
-    <div id="stocksList"></div>
-  </div>
+<div class="filters">
+
+<button class="filter active" onclick="marketFilter('ALL',this)">All</button>
+<button class="filter" onclick="marketFilter('GAINERS',this)">Gainers</button>
+<button class="filter" onclick="marketFilter('LOSERS',this)">Losers</button>
+<button class="filter" onclick="marketFilter('ACTIVE',this)">Most Active</button>
+
+</div>
+
+<div class="card">
+<div id="stocksList"></div>
+</div>
 
 </main>
 
 
-<!-- DETAIL -->
+<!-- ================= STOCK DETAIL ================= -->
 
 <main id="stockDetailScreen" class="content hidden">
 
-  <button class="back" onclick="showScreen('markets')">
-    <span class="material-symbols-rounded">arrow_back</span>
-    Markets
-  </button>
+<button class="back" onclick="showScreen('markets')">
+<span class="material-symbols-rounded">arrow_back</span>
+Markets
+</button>
 
-  <div class="card">
+<div class="card">
 
-    <div class="stock-left">
+<div class="stock-left">
 
-      <div class="stock-icon" id="detailIcon">T</div>
+<div class="stock-icon" id="detailIcon">T</div>
 
-      <div>
-        <div class="stock-name" id="detailName">TCS</div>
-        <div class="stock-symbol" id="detailSymbol">TCS</div>
-      </div>
+<div>
+<div class="stock-name" id="detailName">TCS</div>
+<div class="stock-symbol" id="detailSymbol">TCS</div>
+</div>
 
-    </div>
+</div>
 
-    <div class="detail-price" id="detailPrice">₹0</div>
+<div class="detail-price" id="detailPrice">₹0</div>
+<div id="detailChange" class="green">+0%</div>
 
-    <div id="detailChange" class="green">+0%</div>
+<button id="watchButton" class="watch-btn"
+onclick="toggleWatchlist()">☆ Add to Watchlist</button>
 
-    <button id="watchButton"
-            class="watch-btn"
-            onclick="toggleWatchlist()">
-      ☆ Add to Watchlist
-    </button>
+</div>
 
-  </div>
+<div class="card">
 
-  <div class="card">
+<div class="section-title">Price Chart</div>
 
-    <div class="section-title">Candlestick Chart</div>
+<div class="filters">
+<button class="filter active">1D</button>
+<button class="filter">1W</button>
+<button class="filter">1M</button>
+<button class="filter">1Y</button>
+</div>
 
-    <div class="chart-box">
-      <canvas id="priceCanvas"></canvas>
-    </div>
+<div class="chart-box">
+<canvas id="priceCanvas"></canvas>
+</div>
 
-  </div>
+</div>
 
-  <div class="card">
+<div class="card">
 
-    <div class="section-title">Market Data</div>
+<div class="section-title">Market Data</div>
 
-    <div class="stats">
+<div class="stats">
 
-      <div class="stat">
-        <div class="stat-label">Open</div>
-        <div class="stat-value" id="detailOpen">₹0</div>
-      </div>
+<div class="stat">
+<div class="stat-label">Open</div>
+<div class="stat-value" id="detailOpen">₹0</div>
+</div>
 
-      <div class="stat">
-        <div class="stat-label">High</div>
-        <div class="stat-value" id="detailHigh">₹0</div>
-      </div>
+<div class="stat">
+<div class="stat-label">High</div>
+<div class="stat-value" id="detailHigh">₹0</div>
+</div>
 
-      <div class="stat">
-        <div class="stat-label">Low</div>
-        <div class="stat-value" id="detailLow">₹0</div>
-      </div>
+<div class="stat">
+<div class="stat-label">Low</div>
+<div class="stat-value" id="detailLow">₹0</div>
+</div>
 
-      <div class="stat">
-        <div class="stat-label">Volume</div>
-        <div class="stat-value" id="detailVolume">0</div>
-      </div>
+<div class="stat">
+<div class="stat-label">Volume</div>
+<div class="stat-value" id="detailVolume">0</div>
+</div>
 
-    </div>
+</div>
 
-    <div class="detail-actions">
+<div class="detail-actions">
 
-      <button class="buy-btn" onclick="openOrder('BUY')">BUY</button>
+<button class="buy-btn" onclick="openOrder('BUY')">BUY</button>
+<button class="sell-btn" onclick="openOrder('SELL')">SELL</button>
 
-      <button class="sell-btn" onclick="openOrder('SELL')">SELL</button>
+</div>
 
-    </div>
-
-  </div>
+</div>
 
 </main>
 
 
-<!-- CHART -->
+<!-- ================= CHART ================= -->
 
 <main id="chartScreen" class="content hidden">
 
-  <div class="title-row">
-    <div>
-      <div class="title">Chart</div>
-      <div class="subtitle">Practice reading price movement</div>
-    </div>
-  </div>
+<div class="title-row">
+<div>
+<div class="title">Chart</div>
+<div class="subtitle">Practice reading price movement</div>
+</div>
+</div>
 
-  <div class="card">
+<div class="card">
 
-    <div class="section-title">TCS • Simulated 1D</div>
+<div class="section-title">TCS • Simulated Chart</div>
 
-    <div class="chart-box">
-      <canvas id="mainCanvas"></canvas>
-    </div>
+<div class="filters">
+<button class="filter active">1D</button>
+<button class="filter">1W</button>
+<button class="filter">1M</button>
+</div>
 
-  </div>
+<div class="chart-box">
+<canvas id="mainCanvas"></canvas>
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="section-title">Chart Reading</div>
+
+<p style="color:#9ca6b3;line-height:1.7;font-size:14px">
+Use the chart to practice identifying price movement, candles,
+highs, lows, trends and support/resistance. This simulator uses
+educational simulated data.
+</p>
+
+</div>
 
 </main>
 
 
-<!-- PORTFOLIO -->
+<!-- ================= PORTFOLIO ================= -->
 
 <main id="portfolioScreen" class="content hidden">
 
-  <div class="title-row">
-    <div>
-      <div class="title">Portfolio</div>
-      <div class="subtitle">Your virtual holdings</div>
-    </div>
-  </div>
+<div class="title-row">
+<div>
+<div class="title">Portfolio</div>
+<div class="subtitle">Your virtual holdings</div>
+</div>
+</div>
 
-  <div class="card">
+<div class="card">
 
-    <div class="stats">
+<div class="stats">
 
-      <div class="stat">
-        <div class="stat-label">Invested</div>
-        <div class="stat-value" id="portInvested">₹0</div>
-      </div>
+<div class="stat">
+<div class="stat-label">Invested</div>
+<div class="stat-value" id="portInvested">₹0</div>
+</div>
 
-      <div class="stat">
-        <div class="stat-label">Current Value</div>
-        <div class="stat-value" id="portCurrent">₹0</div>
-      </div>
+<div class="stat">
+<div class="stat-label">Current Value</div>
+<div class="stat-value" id="portCurrent">₹0</div>
+</div>
 
-      <div class="stat">
-        <div class="stat-label">P/L</div>
-        <div class="stat-value" id="portPL">₹0</div>
-      </div>
+<div class="stat">
+<div class="stat-label">P/L</div>
+<div class="stat-value" id="portPL">₹0</div>
+</div>
 
-      <div class="stat">
-        <div class="stat-label">Holdings</div>
-        <div class="stat-value" id="holdingCount">0</div>
-      </div>
+<div class="stat">
+<div class="stat-label">Holdings</div>
+<div class="stat-value" id="holdingCount">0</div>
+</div>
 
-    </div>
+</div>
+</div>
 
-  </div>
-
-  <div class="card">
-    <div class="section-title">Holdings</div>
-    <div id="holdingsList"></div>
-  </div>
+<div class="card">
+<div class="section-title">Holdings</div>
+<div id="holdingsList"></div>
+</div>
 
 </main>
 
 
-<!-- ORDERS -->
+<!-- ================= ORDERS ================= -->
 
 <main id="ordersScreen" class="content hidden">
 
-  <div class="title-row">
-    <div>
-      <div class="title">Orders</div>
-      <div class="subtitle">Simulated trade history</div>
-    </div>
-  </div>
+<div class="title-row">
+<div>
+<div class="title">Orders</div>
+<div class="subtitle">Simulated trade history</div>
+</div>
+</div>
 
-  <div class="filters">
+<div class="filters">
 
-    <button class="filter active"
-            onclick="filterOrders('ALL',this)">All</button>
+<button class="filter active" onclick="filterOrders('ALL',this)">All</button>
+<button class="filter" onclick="filterOrders('BUY',this)">BUY</button>
+<button class="filter" onclick="filterOrders('SELL',this)">SELL</button>
 
-    <button class="filter"
-            onclick="filterOrders('BUY',this)">BUY</button>
+</div>
 
-    <button class="filter"
-            onclick="filterOrders('SELL',this)">SELL</button>
-
-  </div>
-
-  <div class="card">
-    <div id="ordersList"></div>
-  </div>
+<div class="card">
+<div id="ordersList"></div>
+</div>
 
 </main>
 
 
-<!-- WATCHLIST -->
+<!-- ================= WATCHLIST ================= -->
 
 <main id="watchlistScreen" class="content hidden">
 
-  <div class="title-row">
-    <div>
-      <div class="title">Watchlist</div>
-      <div class="subtitle">Stocks you're tracking</div>
-    </div>
-  </div>
+<div class="title-row">
+<div>
+<div class="title">Watchlist</div>
+<div class="subtitle">Stocks you're tracking</div>
+</div>
+</div>
 
-  <div class="card">
-    <div id="watchlist"></div>
-  </div>
+<div class="card">
+<div id="watchlist"></div>
+</div>
 
 </main>
 
 
-<!-- LEARN -->
+<!-- ================= LEARN ================= -->
 
 <main id="learnScreen" class="content hidden">
 
-  <div class="title-row">
-    <div>
-      <div class="title">Learn</div>
-      <div class="subtitle">30-step paper trading course</div>
-    </div>
-  </div>
+<div class="title-row">
 
-  <div class="card">
+<div>
+<div class="title">Learn</div>
+<div class="subtitle">30-step paper trading course</div>
+</div>
 
-    <div style="display:flex;justify-content:space-between">
-      <span id="lessonCount">0 / 30</span>
-      <span id="lessonPercent">0%</span>
-    </div>
+</div>
 
-    <div class="xp-bar">
-      <div id="lessonBar" class="xp-fill"></div>
-    </div>
+<div id="lessonHome">
 
-  </div>
+<div class="card">
 
-  <div class="card">
-    <div id="lessonList"></div>
-  </div>
+<div style="display:flex;justify-content:space-between">
+<span id="lessonCount">0 / 30</span>
+<span id="lessonPercent">0%</span>
+</div>
 
-</main>
+<div class="xp-bar">
+<div id="lessonBar" class="xp-fill"></div>
+</div>
 
+</div>
 
-<!-- JOURNAL -->
-
-<main id="journalScreen" class="content hidden">
-
-  <div class="title-row">
-    <div>
-      <div class="title">Trading Journal</div>
-      <div class="subtitle">Record what you learn</div>
-    </div>
-  </div>
-
-  <div class="card">
-
-    <textarea id="journalInput"
-              placeholder="What did you learn today?"></textarea>
-
-    <button class="primary-btn" onclick="saveJournal()">
-      Save Journal Entry
-    </button>
-
-  </div>
-
-  <div class="card">
-
-    <div class="section-title">Previous Entries</div>
-
-    <div id="journalList"></div>
-
-  </div>
-
-</main>
-
-
-<!-- CHALLENGE -->
-
-<main id="challengeScreen" class="content hidden">
-
-  <div class="title-row">
-    <div>
-      <div class="title">Challenges</div>
-      <div class="subtitle">Practice your knowledge</div>
-    </div>
-  </div>
-
-  <div class="card">
-
-    <div class="section-title">🏆 Beginner Challenge</div>
-
-    <p style="color:#929cab;line-height:1.7">
-      Complete lessons and simulated orders to progress.
-    </p>
-
-    <h2 style="margin-top:15px" id="challengeProgress">
-      0 / 10
-    </h2>
-
-  </div>
-
-  <div class="card">
-
-    <div class="section-title">⭐ XP</div>
-
-    <p style="color:#929cab;line-height:1.7">
-      Lessons = +25 XP<br>
-      Simulated order = +10 XP<br>
-      Journal entry = +15 XP
-    </p>
-
-  </div>
-
-</main>
-
-
-<!-- SETTINGS -->
-
-<main id="settingsScreen" class="content hidden">
-
-  <div class="title-row">
-    <div>
-      <div class="title">Settings</div>
-      <div class="subtitle">Account & simulator</div>
-    </div>
-  </div>
-
-  <div class="card profile-card">
-
-    <div class="avatar" id="settingsAvatar">T</div>
-
-    <div>
-      <b id="settingsName">Trader</b>
-      <div class="subtitle" id="settingsEmail"></div>
-      <div class="subtitle" id="settingsPhone"></div>
-    </div>
-
-  </div>
-
-  <div class="card">
-
-    <div class="setting">
-
-      <div class="setting-left">
-
-        <div class="setting-icon">
-          <span class="material-symbols-rounded">dark_mode</span>
-        </div>
-
-        <div>
-          <b>Dark Mode</b>
-          <div class="subtitle">TradeDemo dark interface</div>
-        </div>
-
-      </div>
-
-      <span class="green">ON</span>
-
-    </div>
-
-    <div class="setting">
-
-      <div class="setting-left">
-
-        <div class="setting-icon">
-          <span class="material-symbols-rounded">currency_rupee</span>
-        </div>
-
-        <div>
-          <b>Virtual Money</b>
-          <div class="subtitle">Practice only</div>
-        </div>
-
-      </div>
-
-      <span class="green">₹</span>
-
-    </div>
-
-    <div class="setting">
-
-      <div class="setting-left">
-
-        <div class="setting-icon">
-          <span class="material-symbols-rounded">school</span>
-        </div>
-
-        <div>
-          <b>Education Mode</b>
-          <div class="subtitle">Learning simulator</div>
-        </div>
-
-      </div>
-
-      <span class="green">ON</span>
-
-    </div>
-
-  </div>
-
-  <div class="card">
-
-    <div class="section-title red">Simulator</div>
-
-    <button class="primary-btn"
-            style="background:#c84352;color:white"
-            onclick="resetSimulator()">
-      Reset Simulator
-    </button>
-
-  </div>
-
-  <div class="card">
-
-    <div class="section-title">Account</div>
-
-    <button class="primary-btn"
-            style="background:#252d38;color:white"
-            onclick="logout()">
-      Logout
-    </button>
-
-  </div>
-
-</main>
-
-
-<!-- ORDER MODAL -->
-
-<div id="orderModal" class="modal hidden">
-
-  <div class="modal-box">
-
-    <div class="modal-head">
-
-      <div>
-        <b style="font-size:21px" id="orderTitle">BUY TCS</b>
-        <div class="subtitle" id="orderPrice">₹0</div>
-      </div>
-
-      <button class="close" onclick="closeOrder()">×</button>
-
-    </div>
-
-    <label class="subtitle">Quantity</label>
-
-    <input id="quantityInput"
-           class="number-input"
-           type="number"
-           min="1"
-           value="1"
-           oninput="updateEstimate()">
-
-    <div class="card">
-
-      <div style="display:flex;justify-content:space-between">
-        <span style="color:#84909f">Estimated Value</span>
-        <b id="estimateValue">₹0</b>
-      </div>
-
-    </div>
-
-    <button id="confirmButton"
-            class="confirm"
-            onclick="confirmOrder()">
-      Confirm BUY
-    </button>
-
-  </div>
+<div class="card">
+<div id="lessonList"></div>
+</div>
 
 </div>
 
 
-<!-- NAV -->
+<div id="lessonDetail" class="hidden">
+
+<button class="back" onclick="closeLesson()">
+<span class="material-symbols-rounded">arrow_back</span>
+All Lessons
+</button>
+
+<div class="card">
+
+<div class="subtitle" id="lessonDetailLevel">LEVEL 1</div>
+
+<div class="lesson-detail-title" id="lessonDetailTitle">
+Market Basics
+</div>
+
+<div id="lessonDetailContent" class="lesson-content"></div>
+
+<div id="lessonIllustration" class="lesson-image"></div>
+
+</div>
+
+<div class="card">
+
+<div class="section-title">💡 Example</div>
+
+<div id="lessonExample" class="example-box"></div>
+
+</div>
+
+<div class="card">
+
+<div class="section-title">🧠 Quick Quiz</div>
+
+<div id="lessonQuestion"
+style="line-height:1.6;margin-bottom:8px"></div>
+
+<div id="quizOptions"></div>
+
+<div id="quizResult" class="quiz-result"></div>
+
+</div>
+
+<div class="lesson-nav">
+
+<button class="filter" onclick="previousLesson()">← Previous</button>
+
+<button id="completeLessonBtn"
+class="primary-btn"
+onclick="finishCurrentLesson()">
+Complete Lesson ✓
+</button>
+
+<button class="filter" onclick="nextLesson()">Next →</button>
+
+</div>
+
+</div>
+
+</main>
+
+
+<!-- ================= JOURNAL ================= -->
+
+<main id="journalScreen" class="content hidden">
+
+<div class="title-row">
+<div>
+<div class="title">Trading Journal</div>
+<div class="subtitle">Record what you learn</div>
+</div>
+</div>
+
+<div class="card">
+
+<textarea id="journalInput"
+placeholder="What did you learn today?"></textarea>
+
+<button class="primary-btn" onclick="saveJournal()">
+Save Journal Entry
+</button>
+
+</div>
+
+<div class="card">
+
+<div class="section-title">Previous Entries</div>
+<div id="journalList"></div>
+
+</div>
+
+</main>
+
+
+<!-- ================= CHALLENGE ================= -->
+
+<main id="challengeScreen" class="content hidden">
+
+<div class="title-row">
+<div>
+<div class="title">Challenges</div>
+<div class="subtitle">Practice your knowledge</div>
+</div>
+</div>
+
+<div class="card">
+
+<div class="section-title">🏆 Beginner Challenge</div>
+
+<p style="color:#929cab;line-height:1.7">
+Complete lessons and simulated orders to progress.
+</p>
+
+<h2 style="margin-top:15px" id="challengeProgress">
+0 / 10
+</h2>
+
+<div class="xp-bar">
+<div class="xp-fill" id="challengeBar"></div>
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="section-title">⭐ XP System</div>
+
+<p style="color:#929cab;line-height:1.8">
+Lessons = +25 XP<br>
+Simulated order = +10 XP<br>
+Journal entry = +15 XP
+</p>
+
+</div>
+
+</main>
+
+
+<!-- ================= SETTINGS ================= -->
+
+<main id="settingsScreen" class="content hidden">
+
+<div class="title-row">
+<div>
+<div class="title">Settings</div>
+<div class="subtitle">Account & simulator</div>
+</div>
+</div>
+
+<div class="card profile-card">
+
+<div class="avatar" id="settingsAvatar">T</div>
+
+<div>
+<b id="settingsName">Trader</b>
+<div class="subtitle" id="settingsEmail"></div>
+<div class="subtitle" id="settingsPhone"></div>
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="setting">
+
+<div class="setting-left">
+
+<div class="setting-icon">
+<span class="material-symbols-rounded">dark_mode</span>
+</div>
+
+<div>
+<b>Dark Mode</b>
+<div class="subtitle">TradeDemo dark interface</div>
+</div>
+
+</div>
+
+<span class="green">ON</span>
+
+</div>
+
+<div class="setting">
+
+<div class="setting-left">
+
+<div class="setting-icon">
+<span class="material-symbols-rounded">currency_rupee</span>
+</div>
+
+<div>
+<b>Virtual Money</b>
+<div class="subtitle">Practice only</div>
+</div>
+
+</div>
+
+<span class="green">₹</span>
+
+</div>
+
+<div class="setting">
+
+<div class="setting-left">
+
+<div class="setting-icon">
+<span class="material-symbols-rounded">school</span>
+</div>
+
+<div>
+<b>Education Mode</b>
+<div class="subtitle">Learning simulator</div>
+</div>
+
+</div>
+
+<span class="green">ON</span>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="section-title red">Simulator</div>
+
+<button class="primary-btn"
+style="background:#c84352;color:white"
+onclick="resetSimulator()">
+Reset Simulator
+</button>
+
+</div>
+
+<div class="card">
+
+<div class="section-title">Account</div>
+
+<button class="primary-btn"
+style="background:#252d38;color:white"
+onclick="logout()">
+Logout
+</button>
+
+</div>
+
+</main>
+
+
+<!-- ================= ORDER MODAL ================= -->
+
+<div id="orderModal" class="modal hidden">
+
+<div class="modal-box">
+
+<div class="modal-head">
+
+<div>
+<b style="font-size:21px" id="orderTitle">BUY TCS</b>
+<div class="subtitle" id="orderPrice">₹0</div>
+</div>
+
+<button class="close" onclick="closeOrder()">×</button>
+
+</div>
+
+<label class="subtitle">Quantity</label>
+
+<input id="quantityInput"
+class="number-input"
+type="number"
+min="1"
+value="1"
+oninput="updateEstimate()">
+
+<div class="card">
+
+<div style="display:flex;justify-content:space-between">
+<span style="color:#84909f">Estimated Value</span>
+<b id="estimateValue">₹0</b>
+</div>
+
+</div>
+
+<button id="confirmButton"
+class="confirm"
+onclick="confirmOrder()">
+Confirm BUY
+</button>
+
+</div>
+</div>
+
+
+<!-- ================= NAV ================= -->
 
 <nav class="bottom-nav">
 
-  <button class="nav-item active" onclick="showScreen('home')">
-    <span class="material-symbols-rounded">home</span>
-    Home
-  </button>
+<button class="nav-item active" onclick="showScreen('home')">
+<span class="material-symbols-rounded">home</span>
+Home
+</button>
 
-  <button class="nav-item" onclick="showScreen('markets')">
-    <span class="material-symbols-rounded">show_chart</span>
-    Markets
-  </button>
+<button class="nav-item" onclick="showScreen('markets')">
+<span class="material-symbols-rounded">show_chart</span>
+Markets
+</button>
 
-  <button class="nav-item" onclick="showScreen('chart')">
-    <span class="material-symbols-rounded">candlestick_chart</span>
-    Chart
-  </button>
+<button class="nav-item" onclick="showScreen('chart')">
+<span class="material-symbols-rounded">candlestick_chart</span>
+Chart
+</button>
 
-  <button class="nav-item" onclick="showScreen('portfolio')">
-    <span class="material-symbols-rounded">account_balance_wallet</span>
-    Portfolio
-  </button>
+<button class="nav-item" onclick="showScreen('portfolio')">
+<span class="material-symbols-rounded">account_balance_wallet</span>
+Portfolio
+</button>
 
-  <button class="nav-item" onclick="showScreen('orders')">
-    <span class="material-symbols-rounded">receipt_long</span>
-    Orders
-  </button>
+<button class="nav-item" onclick="showScreen('orders')">
+<span class="material-symbols-rounded">receipt_long</span>
+Orders
+</button>
 
-  <button class="nav-item" onclick="showScreen('learn')">
-    <span class="material-symbols-rounded">school</span>
-    Learn
-  </button>
+<button class="nav-item" onclick="showScreen('learn')">
+<span class="material-symbols-rounded">school</span>
+Learn
+</button>
 
 </nav>
 
@@ -975,7 +1151,9 @@ canvas{width:100%;height:100%}
 
 <script>
 
-/* ================= STOCK DATA ================= */
+/* =========================================================
+   TRADEDEMO — SIMULATED MARKET DATA
+========================================================= */
 
 const stocks=[
 {name:"TCS",symbol:"TCS",price:3950,change:1.24,open:3890,high:3990,low:3860,volume:"12.4L"},
@@ -987,10 +1165,14 @@ const stocks=[
 {name:"Wipro",symbol:"WIPRO",price:520,change:-.18,open:523,high:528,low:514,volume:"8.8L"},
 {name:"Bajaj Finance",symbol:"BAJFINANCE",price:7200,change:.61,open:7160,high:7270,low:7100,volume:"6.5L"},
 {name:"Maruti Suzuki",symbol:"MARUTI",price:12500,change:.42,open:12440,high:12650,low:12380,volume:"4.2L"},
-{name:"ITC",symbol:"ITC",price:470,change:.31,open:468,high:475,low:463,volume:"25.1L"}
+{name:"ITC",symbol:"ITC",price:470,change:.31,open:468,high:475,low:463,volume:"25.1L"},
+{name:"Larsen & Toubro",symbol:"LT",price:3650,change:-.44,open:3670,high:3710,low:3610,volume:"7.2L"},
+{name:"Axis Bank",symbol:"AXISBANK",price:1180,change:-.61,open:1190,high:1205,low:1165,volume:"11.9L"}
 ];
 
-/* ================= STATE ================= */
+/* =========================================================
+   STATE
+========================================================= */
 
 let balance=100000;
 let holdings={};
@@ -999,10 +1181,16 @@ let watchlist=[];
 let journal=[];
 let lessonsDone=[];
 let xp=0;
+
 let selectedStock=null;
 let orderType="BUY";
+let currentLesson=0;
+let quizPassed=false;
+let currentMarketFilter="ALL";
 
-/* ================= HELPERS ================= */
+/* =========================================================
+   HELPERS
+========================================================= */
 
 function money(n){
 return "₹"+Number(n).toLocaleString("en-IN",{
@@ -1044,7 +1232,15 @@ xp=Number(localStorage.getItem(userKey()+"_xp")||0);
 
 }
 
-/* ================= AUTH ================= */
+function escapeHTML(text){
+const div=document.createElement("div");
+div.textContent=text;
+return div.innerHTML;
+}
+
+/* =========================================================
+   AUTH
+========================================================= */
 
 function showRegister(){
 document.getElementById("loginForm").classList.add("hidden");
@@ -1094,12 +1290,7 @@ error.textContent="Email or phone already registered.";
 return;
 }
 
-users.push({
-name,
-email,
-phone,
-password
-});
+users.push({name,email,phone,password});
 
 localStorage.setItem("tradeDemoUsers",JSON.stringify(users));
 
@@ -1154,7 +1345,9 @@ showLogin();
 
 }
 
-/* ================= APP START ================= */
+/* =========================================================
+   APP
+========================================================= */
 
 function openApp(){
 
@@ -1171,6 +1364,9 @@ document.getElementById("settingsName").textContent=u.name;
 document.getElementById("settingsEmail").textContent=u.email;
 document.getElementById("settingsPhone").textContent=u.phone;
 document.getElementById("settingsAvatar").textContent=u.name.charAt(0).toUpperCase();
+
+document.getElementById("welcomeText").textContent=
+"Welcome back, "+u.name.split(" ")[0];
 
 displayStocks(stocks);
 updateDashboard();
@@ -1225,64 +1421,60 @@ if(screen==="chart")setTimeout(drawMainChart,100);
 
 }
 
-/* ================= STOCKS ================= */
+/* =========================================================
+   MARKET DISPLAY
+========================================================= */
+
+function stockHTML(s){
+
+const index=stocks.indexOf(s);
+
+return `
+<div class="stock" onclick="openStock(${index})">
+
+<div class="stock-left">
+
+<div class="stock-icon">${s.symbol[0]}</div>
+
+<div>
+<div class="stock-name">${escapeHTML(s.name)}</div>
+<div class="stock-symbol">${s.symbol}</div>
+</div>
+
+</div>
+
+<div class="stock-price">
+
+${money(s.price)}
+
+<div class="${s.change>=0?"green":"red"}"
+style="font-size:12px;margin-top:4px">
+
+${s.change>=0?"+":""}${s.change}%
+
+</div>
+
+</div>
+
+</div>`;
+}
 
 function displayStocks(list){
 
 const box=document.getElementById("stocksList");
 
-box.innerHTML=list.map(stock=>{
+if(!list.length){
 
-const index=stocks.indexOf(stock);
-
-return `
-<div class="stock" onclick="openStock(${index})">
-
-<div class="stock-left">
-<div class="stock-icon">${stock.symbol[0]}</div>
-<div>
-<div class="stock-name">${stock.name}</div>
-<div class="stock-symbol">${stock.symbol}</div>
-</div>
-</div>
-
-<div class="stock-price">
-${money(stock.price)}
-<div class="${stock.change>=0?"green":"red"}"
-style="font-size:12px;margin-top:4px">
-${stock.change>=0?"+":""}${stock.change}%
-</div>
-</div>
-
+box.innerHTML=`
+<div class="empty">
+<span class="material-symbols-rounded">search_off</span>
+<div>No matching stocks found</div>
 </div>`;
-}).join("");
 
-document.getElementById("homeStocks").innerHTML=
-list.slice(0,5).map(stock=>{
+return;
+}
 
-const index=stocks.indexOf(stock);
-
-return `
-<div class="stock" onclick="openStock(${index})">
-
-<div class="stock-left">
-<div class="stock-icon">${stock.symbol[0]}</div>
-<div>
-<div class="stock-name">${stock.symbol}</div>
-<div class="stock-symbol">${stock.name}</div>
-</div>
-</div>
-
-<div class="stock-price">
-${money(stock.price)}
-<div class="${stock.change>=0?"green":"red"}"
-style="font-size:12px;margin-top:4px">
-${stock.change>=0?"+":""}${stock.change}%
-</div>
-</div>
-
-</div>`;
-}).join("");
+box.innerHTML=list.map(stockHTML).join("");
 
 }
 
@@ -1291,14 +1483,78 @@ function searchStocks(){
 const q=document.getElementById("searchInput").value
 .toLowerCase().trim();
 
-displayStocks(
-stocks.filter(s=>
+let list=stocks;
+
+if(currentMarketFilter==="GAINERS")
+list=list.filter(s=>s.change>0);
+
+if(currentMarketFilter==="LOSERS")
+list=list.filter(s=>s.change<0);
+
+if(currentMarketFilter==="ACTIVE")
+list=[...list].sort((a,b)=>parseVolume(b.volume)-parseVolume(a.volume));
+
+if(q)
+list=list.filter(s=>
 s.name.toLowerCase().includes(q)||
 s.symbol.toLowerCase().includes(q)
-)
 );
 
+displayStocks(list);
+
 }
+
+function parseVolume(v){
+return Number(v.replace("L",""));
+}
+
+function marketFilter(filter,button){
+
+currentMarketFilter=filter;
+
+document.querySelectorAll("#marketsScreen .filter")
+.forEach(x=>x.classList.remove("active"));
+
+button.classList.add("active");
+
+searchStocks();
+
+}
+
+/* =========================================================
+   HOME MARKET SECTIONS
+========================================================= */
+
+function displayHomeMarkets(){
+
+const gainers=[...stocks]
+.filter(s=>s.change>0)
+.sort((a,b)=>b.change-a.change)
+.slice(0,4);
+
+const losers=[...stocks]
+.filter(s=>s.change<0)
+.sort((a,b)=>a.change-b.change)
+.slice(0,4);
+
+const active=[...stocks]
+.sort((a,b)=>parseVolume(b.volume)-parseVolume(a.volume))
+.slice(0,4);
+
+document.getElementById("homeGainers").innerHTML=
+gainers.map(stockHTML).join("");
+
+document.getElementById("homeLosers").innerHTML=
+losers.map(stockHTML).join("");
+
+document.getElementById("homeActive").innerHTML=
+active.map(stockHTML).join("");
+
+}
+
+/* =========================================================
+   STOCK DETAIL
+========================================================= */
 
 function openStock(index){
 
@@ -1327,13 +1583,12 @@ document.getElementById("detailLow").textContent=money(selectedStock.low);
 document.getElementById("detailVolume").textContent=selectedStock.volume;
 
 updateWatchButton();
+
 showScreen("stockDetail");
 
 setTimeout(()=>drawChart(selectedStock.price),100);
 
 }
-
-/* ================= WATCHLIST ================= */
 
 function toggleWatchlist(){
 
@@ -1385,31 +1640,15 @@ box.innerHTML=watchlist.map(symbol=>{
 const index=stocks.findIndex(s=>s.symbol===symbol);
 const s=stocks[index];
 
-return `
-<div class="stock" onclick="openStock(${index})">
-
-<div class="stock-left">
-<div class="stock-icon">${s.symbol[0]}</div>
-<div>
-<div class="stock-name">${s.name}</div>
-<div class="stock-symbol">${s.symbol}</div>
-</div>
-</div>
-
-<div class="stock-price">
-${money(s.price)}
-<div class="${s.change>=0?"green":"red"}">
-${s.change>=0?"+":""}${s.change}%
-</div>
-</div>
-
-</div>`;
+return stockHTML(s);
 
 }).join("");
 
 }
 
-/* ================= ORDERS ================= */
+/* =========================================================
+   ORDERS
+========================================================= */
 
 function openOrder(type){
 
@@ -1459,7 +1698,7 @@ if(!selectedStock)return;
 const q=Number(document.getElementById("quantityInput").value);
 
 if(!q||q<1){
-alert("Enter valid quantity.");
+alert("Enter a valid quantity.");
 return;
 }
 
@@ -1513,7 +1752,9 @@ time:new Date().toLocaleString()
 xp+=10;
 
 saveData();
+
 closeOrder();
+
 updateDashboard();
 updatePortfolio();
 displayOrders("ALL");
@@ -1522,119 +1763,6 @@ updateChallenge();
 alert(orderType+" order completed in Paper Trading.");
 
 }
-
-/* ================= PORTFOLIO ================= */
-
-function updatePortfolio(){
-
-let invested=0,current=0;
-const symbols=Object.keys(holdings);
-
-symbols.forEach(symbol=>{
-
-const h=holdings[symbol];
-const s=stocks.find(x=>x.symbol===symbol);
-
-if(s){
-invested+=h.invested;
-current+=h.quantity*s.price;
-}
-
-});
-
-const pl=current-invested;
-
-document.getElementById("portInvested").textContent=money(invested);
-document.getElementById("portCurrent").textContent=money(current);
-document.getElementById("portPL").textContent=money(pl);
-document.getElementById("portPL").className=
-"stat-value "+(pl>=0?"green":"red");
-document.getElementById("holdingCount").textContent=symbols.length;
-
-const box=document.getElementById("holdingsList");
-
-if(!symbols.length){
-
-box.innerHTML=`
-<div class="empty">
-<span class="material-symbols-rounded">account_balance_wallet</span>
-<div>No holdings yet</div>
-</div>`;
-
-return;
-}
-
-box.innerHTML=symbols.map(symbol=>{
-
-const h=holdings[symbol];
-const s=stocks.find(x=>x.symbol===symbol);
-const value=h.quantity*s.price;
-const pnl=value-h.invested;
-
-return `
-<div class="holding">
-
-<div class="holding-head">
-<div>
-<b>${s.name}</b>
-<div class="subtitle">${symbol}</div>
-</div>
-<b>${money(value)}</b>
-</div>
-
-<div class="holding-details">
-<span>Qty: ${h.quantity}</span>
-<span>Invested: ${money(h.invested)}</span>
-<span class="${pnl>=0?"green":"red"}">
-${pnl>=0?"+":""}${money(pnl)}
-</span>
-</div>
-
-</div>`;
-
-}).join("");
-
-}
-
-/* ================= DASHBOARD ================= */
-
-function updateDashboard(){
-
-let invested=0,current=0;
-
-Object.keys(holdings).forEach(symbol=>{
-
-const h=holdings[symbol];
-const s=stocks.find(x=>x.symbol===symbol);
-
-if(s){
-invested+=h.invested;
-current+=h.quantity*s.price;
-}
-
-});
-
-const pl=current-invested;
-
-document.getElementById("balanceValue").textContent=money(balance);
-document.getElementById("totalProfit").textContent=
-(pl>=0?"+":"")+money(pl);
-
-document.getElementById("investedValue").textContent=money(invested);
-document.getElementById("portfolioValue").textContent=money(current);
-document.getElementById("ordersValue").textContent=orders.length;
-document.getElementById("xpValue").textContent=xp+" XP";
-
-const done=lessonsDone.length;
-const percent=Math.round(done/30*100);
-
-document.getElementById("homeLessonCount").textContent=done+" / 30";
-document.getElementById("homeLessonPercent").textContent=percent+"%";
-document.getElementById("homeLearnBar").style.width=percent+"%";
-
-}
-
-/* ================= ORDERS LIST ================= */
 
 function displayOrders(filter){
 
@@ -1663,23 +1791,31 @@ box.innerHTML=list.map(o=>`
 <div class="order-left">
 
 <div class="order-icon">
+
 <span class="material-symbols-rounded ${o.type==="BUY"?"green":"red"}">
 ${o.type==="BUY"?"trending_up":"trending_down"}
 </span>
+
 </div>
 
 <div>
+
 <b>${o.type} ${o.symbol}</b>
+
 <div class="subtitle">
-${o.quantity} shares • ${o.time}
+${o.quantity} shares • ${escapeHTML(o.time)}
 </div>
+
 </div>
 
 </div>
 
 <div style="text-align:right">
+
 <b>${money(o.total)}</b>
+
 <div class="subtitle">@ ${money(o.price)}</div>
+
 </div>
 
 </div>
@@ -1690,7 +1826,7 @@ ${o.quantity} shares • ${o.time}
 
 function filterOrders(filter,button){
 
-document.querySelectorAll(".filter")
+document.querySelectorAll("#ordersScreen .filter")
 .forEach(x=>x.classList.remove("active"));
 
 button.classList.add("active");
@@ -1699,59 +1835,612 @@ displayOrders(filter);
 
 }
 
-/* ================= LEARNING ================= */
+/* =========================================================
+   PORTFOLIO
+========================================================= */
 
-const lessons=[
-"Market kya hai",
-"Stock kya hai",
-"Index kya hai",
-"Price kya hai",
-"BUY / SELL",
-"Charts",
-"Candlesticks",
-"Open / High / Low / Close",
-"Volume",
-"Trend",
-"Market Order",
-"Limit Order",
-"Stop Concepts",
-"Quantity",
-"P/L Calculation",
-"Support",
-"Resistance",
-"Technical Analysis",
-"Fundamental Analysis",
-"Risk Management",
-"Trading Journal",
-"Backtesting",
-"Strategy Testing",
-"Performance Analysis",
-"Mistake Analysis",
-"Full Simulation",
-"One-Candle Exercises",
-"Entry / Exit Reasoning",
-"Risk / Reward",
-"Review & Improve"
+function updatePortfolio(){
+
+let invested=0,current=0;
+const symbols=Object.keys(holdings);
+
+symbols.forEach(symbol=>{
+
+const h=holdings[symbol];
+const s=stocks.find(x=>x.symbol===symbol);
+
+if(s){
+invested+=h.invested;
+current+=h.quantity*s.price;
+}
+
+});
+
+const pl=current-invested;
+
+document.getElementById("portInvested").textContent=money(invested);
+document.getElementById("portCurrent").textContent=money(current);
+document.getElementById("portPL").textContent=money(pl);
+document.getElementById("portPL").className=
+"stat-value "+(pl>=0?"green":"red");
+
+document.getElementById("holdingCount").textContent=symbols.length;
+
+const box=document.getElementById("holdingsList");
+
+if(!symbols.length){
+
+box.innerHTML=`
+<div class="empty">
+<span class="material-symbols-rounded">account_balance_wallet</span>
+<div>No holdings yet</div>
+</div>`;
+
+return;
+}
+
+box.innerHTML=symbols.map(symbol=>{
+
+const h=holdings[symbol];
+const s=stocks.find(x=>x.symbol===symbol);
+const value=h.quantity*s.price;
+const pnl=value-h.invested;
+
+return `
+<div class="holding">
+
+<div class="holding-head">
+
+<div>
+<b>${escapeHTML(s.name)}</b>
+<div class="subtitle">${symbol}</div>
+</div>
+
+<b>${money(value)}</b>
+
+</div>
+
+<div class="holding-details">
+
+<span>Qty: ${h.quantity}</span>
+
+<span>Invested: ${money(h.invested)}</span>
+
+<span class="${pnl>=0?"green":"red"}">
+${pnl>=0?"+":""}${money(pnl)}
+</span>
+
+</div>
+
+</div>`;
+
+}).join("");
+
+}
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function updateDashboard(){
+
+let invested=0,current=0;
+
+Object.keys(holdings).forEach(symbol=>{
+
+const h=holdings[symbol];
+const s=stocks.find(x=>x.symbol===symbol);
+
+if(s){
+invested+=h.invested;
+current+=h.quantity*s.price;
+}
+
+});
+
+const pl=current-invested;
+
+document.getElementById("balanceValue").textContent=money(balance);
+
+document.getElementById("totalProfit").textContent=
+(pl>=0?"+":"")+money(pl);
+
+document.getElementById("totalProfit").className=
+pl>=0?"green":"red";
+
+document.getElementById("investedValue").textContent=money(invested);
+document.getElementById("portfolioValue").textContent=money(current);
+document.getElementById("ordersValue").textContent=orders.length;
+document.getElementById("xpValue").textContent=xp+" XP";
+
+const done=lessonsDone.length;
+const percent=Math.round(done/30*100);
+
+document.getElementById("homeLessonCount").textContent=
+done+" / 30";
+
+document.getElementById("homeLessonPercent").textContent=
+percent+"%";
+
+document.getElementById("homeLearnBar").style.width=
+percent+"%";
+
+displayHomeMarkets();
+
+}
+
+/* =========================================================
+   30 LESSONS
+========================================================= */
+
+const lessonData=[
+
+{
+title:"What Is a Market?",
+level:"LEVEL 1 • MARKET BASICS",
+content:"A financial market is a system where buyers and sellers exchange financial assets. In the stock market, people can buy and sell shares of companies. In TradeDemo, you are learning through simulated money instead of real money.",
+example:"Imagine a marketplace. One person wants to sell something and another person wants to buy it. A stock market performs a similar function for shares.",
+type:"market",
+question:"What is the basic purpose of a stock market?",
+options:["To connect buyers and sellers","To guarantee profits","To create free money","To remove all risk"],
+answer:0
+},
+
+{
+title:"What Is a Stock?",
+level:"LEVEL 1 • MARKET BASICS",
+content:"A stock, also called a share, represents a small ownership interest in a company. When you practice buying a stock in TradeDemo, your simulator records virtual shares in your portfolio.",
+example:"If a company has many shares and you own some of them, those shares represent a small portion of ownership.",
+type:"stock",
+question:"A stock represents what?",
+options:["A guaranteed profit","A unit of ownership in a company","A bank password","A market prediction"],
+answer:1
+},
+
+{
+title:"What Is an Index?",
+level:"LEVEL 1 • MARKET BASICS",
+content:"An index tracks a selected group of stocks and provides a way to observe the performance of that group. Examples commonly followed in India include NIFTY 50 and SENSEX.",
+example:"Instead of checking dozens of stocks separately, an index gives you one number representing the movement of its selected group.",
+type:"index",
+question:"What does an index generally track?",
+options:["A group of selected stocks","One person's portfolio","Only bank accounts","Only currencies"],
+answer:0
+},
+
+{
+title:"What Is Price?",
+level:"LEVEL 1 • MARKET BASICS",
+content:"A stock price is the quoted value of a share. In real markets, prices can change as buy and sell orders interact. In TradeDemo, prices are simulated for learning.",
+example:"If a simulated stock moves from ₹100 to ₹105, the displayed price has increased by ₹5.",
+type:"price",
+question:"What can cause a market price to change?",
+options:["Only the calendar","Interaction between buyers and sellers","A fixed rule that never changes","Your phone battery"],
+answer:1
+},
+
+{
+title:"BUY and SELL",
+level:"LEVEL 1 • MARKET BASICS",
+content:"BUY means adding virtual shares to your simulated portfolio. SELL means reducing your virtual share quantity. TradeDemo uses virtual balance and simulated orders.",
+example:"If you buy 10 simulated shares and later sell 4, your simulated holding becomes 6 shares, assuming no other transaction.",
+type:"buy",
+question:"What happens to a simulated holding when you sell shares?",
+options:["The quantity increases","The quantity decreases","The account disappears","Nothing can change"],
+answer:1
+},
+
+{
+title:"Understanding Charts",
+level:"LEVEL 2 • CHARTS",
+content:"A chart displays price movement over time. Charts help you practice observing historical movement, highs, lows and patterns. A chart does not guarantee what will happen next.",
+example:"A line moving from ₹100 to ₹110 shows that the displayed price increased during that period.",
+type:"chart",
+question:"What does a price chart mainly show?",
+options:["Price movement over time","Your password","A guaranteed future price","Your phone storage"],
+answer:0
+},
+
+{
+title:"Candlesticks",
+level:"LEVEL 2 • CHARTS",
+content:"A candlestick is a compact way to display price information for a specific time period. It can show the opening price, closing price, highest price and lowest price.",
+example:"A candle with a close above its open is commonly called a bullish candle. A close below its open is commonly called a bearish candle.",
+type:"candle",
+question:"What does one candlestick represent?",
+options:["A specific time period of price data","Your entire portfolio","A company password","Only trading volume"],
+answer:0
+},
+
+{
+title:"Open, High, Low and Close",
+level:"LEVEL 2 • CHARTS",
+content:"OHLC means Open, High, Low and Close. Open is the starting price for the period. High is the highest price. Low is the lowest price. Close is the ending price.",
+example:"Open ₹100, High ₹110, Low ₹96, Close ₹106. These four values describe the candle's basic price information.",
+type:"ohlc",
+question:"What does OHLC stand for?",
+options:["Order, Hold, Limit, Cash","Open, High, Low, Close","Only High Level Chart","Open, Hold, Loss, Capital"],
+answer:1
+},
+
+{
+title:"Volume",
+level:"LEVEL 2 • CHARTS",
+content:"Volume represents the amount of trading activity during a particular period. In stock markets, volume is commonly expressed as the number of shares traded.",
+example:"If a simulated stock shows 10 lakh shares of volume, the displayed activity is 10 lakh shares for the relevant period.",
+type:"volume",
+question:"What does volume help you observe?",
+options:["Trading activity","Your age","Your password","Guaranteed returns"],
+answer:0
+},
+
+{
+title:"Understanding Trend",
+level:"LEVEL 2 • CHARTS",
+content:"A trend describes the general direction of price movement. A trend may be upward, downward or sideways. Trends are observations of past or current movement, not guarantees.",
+example:"A sequence of generally higher prices may be described as an upward trend.",
+type:"trend",
+question:"Which is a common type of trend?",
+options:["Upward","Password trend","Battery trend","Account trend"],
+answer:0
+},
+
+{
+title:"Market Order",
+level:"LEVEL 3 • ORDERS",
+content:"A market order is an instruction to buy or sell at the available market price. The exact execution price can differ from a displayed price in real markets. TradeDemo provides a simplified simulation.",
+example:"A simulated market BUY uses the current simulated stock price when the order is confirmed.",
+type:"order",
+question:"A market order is generally intended to execute at what?",
+options:["The available market price","Any price next year","A guaranteed future price","Zero"],
+answer:0
+},
+
+{
+title:"Limit Order",
+level:"LEVEL 3 • ORDERS",
+content:"A limit order specifies a price condition. A buy limit is generally intended to execute at the specified price or better, while a sell limit is generally intended to execute at the specified price or better.",
+example:"A simulated buy limit at ₹100 could be designed to execute only if the defined price condition is met.",
+type:"limit",
+question:"What is the main feature of a limit order?",
+options:["It specifies a price condition","It guarantees profit","It removes risk","It always executes immediately"],
+answer:0
+},
+
+{
+title:"Stop Concepts",
+level:"LEVEL 3 • ORDERS",
+content:"A stop order concept uses a trigger price. When the trigger condition is reached, the order can become active according to its rules. Stop concepts are useful to learn as part of order management.",
+example:"A trader may study how a stop trigger works without placing a real order. TradeDemo keeps this educational.",
+type:"stop",
+question:"What is central to a stop-order concept?",
+options:["A trigger condition","Guaranteed profit","Free shares","A password"],
+answer:0
+},
+
+{
+title:"Quantity",
+level:"LEVEL 3 • ORDERS",
+content:"Quantity means how many shares you are buying or selling. The total simulated order value depends on quantity multiplied by the simulated price.",
+example:"5 shares × ₹200 = ₹1,000 simulated order value.",
+type:"quantity",
+question:"How is basic order value calculated?",
+options:["Quantity × price","Quantity + password","Price ÷ phone number","Nothing"],
+answer:0
+},
+
+{
+title:"Profit and Loss",
+level:"LEVEL 3 • ORDERS",
+content:"Profit and loss, often called P/L, compares the current value of a position with its relevant invested value. A positive difference is a gain and a negative difference is a loss.",
+example:"If simulated invested value is ₹1,000 and current value is ₹1,080, the difference is +₹80.",
+type:"pl",
+question:"If invested value is ₹1,000 and current value is ₹900, what is the difference?",
+options:["+₹100","₹0","-₹100","+₹900"],
+answer:2
+},
+
+{
+title:"Support",
+level:"LEVEL 4 • ANALYSIS",
+content:"Support is a price area where buying interest has historically appeared or where price has previously found difficulty moving lower. It is an analytical concept, not a guaranteed floor.",
+example:"If price repeatedly reacts around a particular area, a learner may mark that area as possible support for study.",
+type:"support",
+question:"Is support a guaranteed price floor?",
+options:["Yes","No","Always","Only on weekends"],
+answer:1
+},
+
+{
+title:"Resistance",
+level:"LEVEL 4 • ANALYSIS",
+content:"Resistance is a price area where selling pressure has historically appeared or where price has previously struggled to move higher. It is an analytical concept, not a guaranteed ceiling.",
+example:"If price repeatedly reacts near a particular level, that area may be studied as possible resistance.",
+type:"resistance",
+question:"Resistance is best described as:",
+options:["A guaranteed ceiling","A price area studied for possible selling pressure","A bank account","A password"],
+answer:1
+},
+
+{
+title:"Technical Analysis",
+level:"LEVEL 4 • ANALYSIS",
+content:"Technical analysis studies market information such as price and volume. Learners may use charts, trends, support, resistance and indicators to study historical behaviour.",
+example:"Studying a chart's trend and volume is an example of technical analysis.",
+type:"technical",
+question:"Technical analysis commonly studies:",
+options:["Price and volume","Only passwords","Only company uniforms","Phone settings"],
+answer:0
+},
+
+{
+title:"Fundamental Analysis",
+level:"LEVEL 4 • ANALYSIS",
+content:"Fundamental analysis focuses on information about a company or economy, such as business performance, financial statements, revenue, profits, debt and other relevant factors.",
+example:"Studying a company's financial results is part of fundamental analysis.",
+type:"fundamental",
+question:"Fundamental analysis focuses mainly on:",
+options:["Company and economic information","Only candle colours","Phone storage","Random guesses"],
+answer:0
+},
+
+{
+title:"Risk Management",
+level:"LEVEL 4 • RISK",
+content:"Risk management means understanding and controlling the amount of potential loss you are willing to expose in a trading plan. In a simulator, it helps you practice disciplined decision-making.",
+example:"Instead of putting all virtual capital into one simulated position, a learner can study position sizing and predefined risk limits.",
+type:"risk",
+question:"What is a key purpose of risk management?",
+options:["Control potential exposure","Guarantee profit","Remove every loss","Predict every price"],
+answer:0
+},
+
+{
+title:"Trading Journal",
+level:"LEVEL 5 • REVIEW",
+content:"A trading journal records decisions, reasons, results and lessons. It helps learners review what happened rather than relying only on memory.",
+example:"Record the stock, simulated entry, reason, result and what you would review next time.",
+type:"journal",
+question:"Why keep a trading journal?",
+options:["To review decisions and learning","To guarantee profit","To hide mistakes","To predict every market move"],
+answer:0
+},
+
+{
+title:"Backtesting",
+level:"LEVEL 5 • STRATEGY",
+content:"Backtesting means applying a defined strategy or set of rules to historical data to study how it would have behaved. Historical results do not guarantee future results.",
+example:"A learner could test a simple rule against past simulated price data and record the results.",
+type:"backtest",
+question:"What data is commonly used in backtesting?",
+options:["Historical data","Only future data","Phone contacts","Passwords"],
+answer:0
+},
+
+{
+title:"Strategy Testing",
+level:"LEVEL 5 • STRATEGY",
+content:"Strategy testing means defining clear rules and evaluating them consistently. A useful learning process records the same conditions rather than changing rules after every result.",
+example:"Define an entry rule, exit rule and risk rule, then test those rules over many simulated examples.",
+type:"strategy",
+question:"Why should strategy rules be clearly defined?",
+options:["For consistent testing","To guarantee profits","To avoid learning","To make every trade win"],
+answer:0
+},
+
+{
+title:"Performance Analysis",
+level:"LEVEL 5 • REVIEW",
+content:"Performance analysis reviews results using measurements such as total P/L, number of trades, winning and losing trades, average result and consistency.",
+example:"Instead of looking at one trade, review a whole group of simulated trades to understand the overall results.",
+type:"performance",
+question:"What should performance analysis examine?",
+options:["A set of results","Only the biggest win","Only one lucky trade","Nothing"],
+answer:0
+},
+
+{
+title:"Mistake Analysis",
+level:"LEVEL 5 • REVIEW",
+content:"Mistake analysis means identifying repeated decision errors and understanding why they happened. The goal is learning and improvement rather than simply counting losses.",
+example:"If a learner repeatedly enters without recording a reason, the journal can highlight that pattern.",
+type:"mistake",
+question:"What is the purpose of mistake analysis?",
+options:["Identify patterns and improve","Guarantee future wins","Hide mistakes","Stop learning"],
+answer:0
+},
+
+{
+title:"Full Simulation",
+level:"LEVEL 6 • PRACTICE",
+content:"Full simulation combines market observation, watchlists, charts, virtual orders, portfolio tracking and journaling. This gives you a structured environment for practice.",
+example:"Choose a simulated stock, study its chart, record your reasoning, place a virtual order and later review the result.",
+type:"simulation",
+question:"What does a full simulation combine?",
+options:["Multiple learning skills","Only one button","Real money","Guaranteed returns"],
+answer:0
+},
+
+{
+title:"One-Candle Exercises",
+level:"LEVEL 6 • PRACTICE",
+content:"A one-candle exercise focuses on understanding a single candle. Study its open, high, low and close before thinking about what the candle may communicate.",
+example:"If Open = ₹100, High = ₹110, Low = ₹95 and Close = ₹108, describe the candle using those four values.",
+type:"candle2",
+question:"Which four values should you inspect first?",
+options:["Open, High, Low, Close","Name, phone, email, password","Buy, sell, profit, tax","Day, month, year, age"],
+answer:0
+},
+
+{
+title:"Entry and Exit Reasoning",
+level:"LEVEL 6 • DECISION MAKING",
+content:"Entry and exit reasoning means documenting why a simulated trade was opened or closed. The focus is on a clear process rather than trying to predict every market move.",
+example:"A journal entry might state: 'I entered because of my predefined practice rule; I exited because the rule was completed.'",
+type:"entry",
+question:"What should good practice reasoning include?",
+options:["A clear reason","A random guess only","A guarantee","No record"],
+answer:0
+},
+
+{
+title:"Risk and Reward",
+level:"LEVEL 6 • RISK",
+content:"Risk/reward compares the potential loss you are studying with the potential gain you are targeting. It is a planning concept, not a guarantee of outcome.",
+example:"If a simulated plan studies ₹100 of potential loss against ₹200 of potential gain, the simple ratio is 1:2.",
+type:"rr",
+question:"A ₹100 potential loss and ₹200 potential gain gives what simple ratio?",
+options:["1:2","2:1","1:1","3:1"],
+answer:0
+},
+
+{
+title:"Review and Improve",
+level:"LEVEL 6 • FINAL",
+content:"Learning is an ongoing process. Review your journal, simulated orders, chart observations, mistakes and performance. Then identify one specific area to improve.",
+example:"After a simulation, write one thing that worked, one mistake and one thing you will study next.",
+type:"review",
+question:"What is a useful final step after practice?",
+options:["Review and improve","Forget everything","Assume every result will repeat","Stop recording"],
+answer:0
+}
+
 ];
+
+/* =========================================================
+   LESSON ILLUSTRATIONS
+========================================================= */
+
+function illustration(type){
+
+const common=`font-family:Arial,sans-serif`;
+
+if(type==="candle"||type==="ohlc"||type==="candle2"){
+
+return `
+<svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg">
+<rect width="600" height="260" rx="14" fill="#090d13"/>
+<line x1="170" y1="35" x2="170" y2="225" stroke="#36d399" stroke-width="5"/>
+<rect x="140" y="85" width="60" height="90" rx="5" fill="#36d399"/>
+<text x="215" y="70" fill="#fff" font-size="18" style="${common}">High</text>
+<text x="215" y="125" fill="#fff" font-size="18" style="${common}">Open</text>
+<text x="215" y="165" fill="#fff" font-size="18" style="${common}">Close</text>
+<text x="215" y="220" fill="#fff" font-size="18" style="${common}">Low</text>
+<line x1="205" y1="65" x2="320" y2="65" stroke="#697484"/>
+<line x1="205" y1="120" x2="320" y2="120" stroke="#697484"/>
+<line x1="205" y1="170" x2="320" y2="170" stroke="#697484"/>
+<line x1="205" y1="220" x2="320" y2="220" stroke="#697484"/>
+<text x="365" y="120" fill="#36d399" font-size="19" style="${common}">Candle</text>
+<text x="365" y="150" fill="#9ca6b3" font-size="15" style="${common}">OHLC</text>
+</svg>`;
+}
+
+if(type==="trend"){
+
+return `
+<svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg">
+<rect width="600" height="260" rx="14" fill="#090d13"/>
+<polyline points="40,210 130,180 210,195 300,130 390,145 480,75 560,95"
+fill="none" stroke="#36d399" stroke-width="5"/>
+<circle cx="40" cy="210" r="6" fill="#36d399"/>
+<circle cx="300" cy="130" r="6" fill="#36d399"/>
+<circle cx="560" cy="95" r="6" fill="#36d399"/>
+<text x="40" y="240" fill="#9ca6b3" font-size="16">Time</text>
+<text x="470" y="55" fill="#36d399" font-size="18">Upward trend</text>
+</svg>`;
+}
+
+if(type==="volume"){
+
+return `
+<svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg">
+<rect width="600" height="260" rx="14" fill="#090d13"/>
+<rect x="70" y="160" width="55" height="55" fill="#36d399"/>
+<rect x="155" y="120" width="55" height="95" fill="#36d399"/>
+<rect x="240" y="85" width="55" height="130" fill="#36d399"/>
+<rect x="325" y="140" width="55" height="75" fill="#36d399"/>
+<rect x="410" y="55" width="55" height="160" fill="#36d399"/>
+<line x1="45" y1="215" x2="540" y2="215" stroke="#697484"/>
+<text x="70" y="45" fill="#fff" font-size="20">Trading Volume</text>
+</svg>`;
+}
+
+if(type==="support"||type==="resistance"){
+
+return `
+<svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg">
+<rect width="600" height="260" rx="14" fill="#090d13"/>
+<polyline points="40,80 100,150 160,90 220,160 280,105 340,155 400,95 460,150 520,105 560,140"
+fill="none" stroke="#36d399" stroke-width="4"/>
+<line x1="30" y1="${type==="support"?175:85}" x2="570" y2="${type==="support"?175:85}"
+stroke="${type==="support"?"#36d399":"#ff6675"}" stroke-width="2" stroke-dasharray="8 7"/>
+<text x="40" y="${type==="support"?205:65}"
+fill="${type==="support"?"#36d399":"#ff6675"}" font-size="18">
+${type==="support"?"Support area":"Resistance area"}
+</text>
+</svg>`;
+}
+
+if(type==="risk"||type==="rr"){
+
+return `
+<svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg">
+<rect width="600" height="260" rx="14" fill="#090d13"/>
+<rect x="100" y="90" width="400" height="55" rx="10" fill="#35191e"/>
+<rect x="100" y="145" width="400" height="55" rx="10" fill="#103127"/>
+<text x="125" y="125" fill="#ff6675" font-size="20">Potential Risk</text>
+<text x="125" y="180" fill="#36d399" font-size="20">Potential Reward</text>
+<text x="425" y="125" fill="#9ca6b3" font-size="15">Plan</text>
+<text x="425" y="180" fill="#9ca6b3" font-size="15">Compare</text>
+</svg>`;
+}
+
+return `
+<svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
+<rect width="600" height="220" rx="14" fill="#090d13"/>
+<polyline points="35,170 110,140 175,155 250,105 330,120 410,75 500,95 565,45"
+fill="none" stroke="#36d399" stroke-width="4"/>
+<circle cx="565" cy="45" r="7" fill="#36d399"/>
+<text x="35" y="45" fill="#fff" font-size="20">Market Learning</text>
+<text x="35" y="195" fill="#8f99a8" font-size="15">Observe • Learn • Practice • Review</text>
+</svg>`;
+}
+
+/* =========================================================
+   LEARNING UI
+========================================================= */
 
 function displayLessons(){
 
 const box=document.getElementById("lessonList");
 
-box.innerHTML=lessons.map((name,i)=>{
+box.innerHTML=lessonData.map((lesson,i)=>{
 
 const done=lessonsDone.includes(i);
 
 return `
-<div class="lesson" onclick="completeLesson(${i})">
+<div class="lesson" onclick="openLesson(${i})">
 
-<div class="lesson-number">${done?"✓":i+1}</div>
+<div class="lesson-number">
+${done?"✓":i+1}
+</div>
 
 <div>
-<div class="lesson-title">${name}</div>
-<div class="lesson-level">
-LEVEL ${Math.floor(i/5)+1}
+
+<div class="lesson-title">
+${escapeHTML(lesson.title)}
 </div>
+
+<div class="lesson-level">
+${lesson.level}
+</div>
+
+</div>
+
+<div class="lesson-arrow">
+<span class="material-symbols-rounded">
+${done?"check_circle":"chevron_right"}
+</span>
 </div>
 
 </div>`;
@@ -1762,27 +2451,13 @@ updateLearning();
 
 }
 
-function completeLesson(i){
-
-if(lessonsDone.includes(i))return;
-
-lessonsDone.push(i);
-xp+=25;
-
-saveData();
-displayLessons();
-updateDashboard();
-updateChallenge();
-
-}
-
 function updateLearning(){
 
 const count=lessonsDone.length;
-const percent=Math.round(count/lessons.length*100);
+const percent=Math.round(count/lessonData.length*100);
 
 document.getElementById("lessonCount").textContent=
-count+" / "+lessons.length;
+count+" / "+lessonData.length;
 
 document.getElementById("lessonPercent").textContent=
 percent+"%";
@@ -1792,7 +2467,157 @@ percent+"%";
 
 }
 
-/* ================= JOURNAL ================= */
+function openLesson(i){
+
+currentLesson=i;
+quizPassed=false;
+
+const l=lessonData[i];
+
+document.getElementById("lessonHome").classList.add("hidden");
+document.getElementById("lessonDetail").classList.remove("hidden");
+
+document.getElementById("lessonDetailLevel").textContent=l.level;
+document.getElementById("lessonDetailTitle").textContent=l.title;
+document.getElementById("lessonDetailContent").innerHTML=l.content;
+document.getElementById("lessonIllustration").innerHTML=
+illustration(l.type);
+document.getElementById("lessonExample").textContent=l.example;
+
+document.getElementById("lessonQuestion").textContent=
+l.question;
+
+const options=document.getElementById("quizOptions");
+
+options.innerHTML=l.options.map((option,i)=>`
+<button class="quiz-option" onclick="answerQuiz(${i})">
+${escapeHTML(option)}
+</button>
+`).join("");
+
+document.getElementById("quizResult").textContent="";
+
+const btn=document.getElementById("completeLessonBtn");
+
+if(lessonsDone.includes(i)){
+btn.textContent="Completed ✓";
+btn.disabled=true;
+btn.style.opacity=".6";
+}else{
+btn.textContent="Complete Lesson ✓";
+btn.disabled=true;
+btn.style.opacity="1";
+}
+
+window.scrollTo({top:0,behavior:"smooth"});
+
+}
+
+function answerQuiz(choice){
+
+const l=lessonData[currentLesson];
+const buttons=document.querySelectorAll(".quiz-option");
+const result=document.getElementById("quizResult");
+
+buttons.forEach(b=>b.disabled=true);
+
+if(choice===l.answer){
+
+buttons[choice].classList.add("correct");
+result.textContent="Correct! You can now complete this lesson.";
+result.className="quiz-result green";
+
+quizPassed=true;
+
+const btn=document.getElementById("completeLessonBtn");
+
+if(!lessonsDone.includes(currentLesson)){
+btn.disabled=false;
+btn.style.opacity="1";
+}
+
+}else{
+
+buttons[choice].classList.add("wrong");
+buttons[l.answer].classList.add("correct");
+
+result.textContent=
+"Not quite. Review the explanation above and try the lesson again.";
+
+result.className="quiz-result red";
+
+quizPassed=false;
+
+}
+
+}
+
+function finishCurrentLesson(){
+
+if(lessonsDone.includes(currentLesson)){
+return;
+}
+
+if(!quizPassed){
+alert("Complete the quiz correctly first.");
+return;
+}
+
+lessonsDone.push(currentLesson);
+xp+=25;
+
+saveData();
+
+displayLessons();
+updateDashboard();
+updateChallenge();
+
+document.getElementById("completeLessonBtn").textContent=
+"Completed ✓";
+
+document.getElementById("completeLessonBtn").disabled=true;
+
+setTimeout(()=>{
+
+if(currentLesson<lessonData.length-1){
+openLesson(currentLesson+1);
+}else{
+closeLesson();
+alert("🎉 You completed all 30 lessons!");
+}
+
+},400);
+
+}
+
+function closeLesson(){
+
+document.getElementById("lessonDetail").classList.add("hidden");
+document.getElementById("lessonHome").classList.remove("hidden");
+
+displayLessons();
+
+window.scrollTo({top:0,behavior:"smooth"});
+
+}
+
+function previousLesson(){
+
+if(currentLesson>0)
+openLesson(currentLesson-1);
+
+}
+
+function nextLesson(){
+
+if(currentLesson<lessonData.length-1)
+openLesson(currentLesson+1);
+
+}
+
+/* =========================================================
+   JOURNAL
+========================================================= */
 
 function saveJournal(){
 
@@ -1826,8 +2651,8 @@ const box=document.getElementById("journalList");
 
 if(!journal.length){
 
-box.innerHTML=`
-<div class="empty">No journal entries yet.</div>`;
+box.innerHTML=
+`<div class="empty">No journal entries yet.</div>`;
 
 return;
 }
@@ -1840,7 +2665,9 @@ box.innerHTML=journal.map(j=>`
 ${escapeHTML(j.text)}
 </div>
 
-<div class="subtitle">${j.time}</div>
+<div class="subtitle">
+${escapeHTML(j.time)}
+</div>
 
 </div>
 
@@ -1848,15 +2675,9 @@ ${escapeHTML(j.text)}
 
 }
 
-function escapeHTML(text){
-
-const div=document.createElement("div");
-div.textContent=text;
-return div.innerHTML;
-
-}
-
-/* ================= CHALLENGE ================= */
+/* =========================================================
+   CHALLENGE
+========================================================= */
 
 function updateChallenge(){
 
@@ -1867,9 +2688,14 @@ orders.length+lessonsDone.length,10
 document.getElementById("challengeProgress").textContent=
 progress+" / 10";
 
+document.getElementById("challengeBar").style.width=
+(progress/10*100)+"%";
+
 }
 
-/* ================= CHARTS ================= */
+/* =========================================================
+   CHARTS
+========================================================= */
 
 function setupCanvas(canvas){
 
@@ -1880,15 +2706,21 @@ canvas.width=rect.width*dpr;
 canvas.height=rect.height*dpr;
 
 const ctx=canvas.getContext("2d");
+
 ctx.setTransform(dpr,0,0,dpr,0,0);
 
-return {ctx,width:rect.width,height:rect.height};
+return{
+ctx,
+width:rect.width,
+height:rect.height
+};
 
 }
 
 function drawChart(price){
 
 const canvas=document.getElementById("priceCanvas");
+
 if(!canvas)return;
 
 const {ctx,width,height}=setupCanvas(canvas);
@@ -1901,11 +2733,18 @@ const candles=[];
 for(let i=0;i<32;i++){
 
 const open=value;
-const close=open+(Math.random()-.45)*price*.012;
-const high=Math.max(open,close)+Math.random()*price*.006;
-const low=Math.min(open,close)-Math.random()*price*.006;
+
+const close=
+open+(Math.random()-.45)*price*.012;
+
+const high=
+Math.max(open,close)+Math.random()*price*.006;
+
+const low=
+Math.min(open,close)-Math.random()*price*.006;
 
 candles.push({open,close,high,low});
+
 value=close;
 
 }
@@ -1913,7 +2752,9 @@ value=close;
 const min=Math.min(...candles.map(x=>x.low));
 const max=Math.max(...candles.map(x=>x.high));
 
-const y=v=>height-((v-min)/(max-min))*(height-20)-10;
+const y=v=>
+height-((v-min)/(max-min))*(height-20)-10;
+
 const gap=width/candles.length;
 
 candles.forEach((c,i)=>{
@@ -1925,14 +2766,24 @@ ctx.strokeStyle=up?"#36d399":"#ff6675";
 ctx.fillStyle=ctx.strokeStyle;
 
 ctx.beginPath();
+
 ctx.moveTo(x,y(c.high));
 ctx.lineTo(x,y(c.low));
+
 ctx.stroke();
 
 const top=Math.min(y(c.open),y(c.close));
-const h=Math.max(Math.abs(y(c.close)-y(c.open)),2);
 
-ctx.fillRect(x-gap*.28,top,gap*.56,h);
+const h=Math.max(
+Math.abs(y(c.close)-y(c.open)),2
+);
+
+ctx.fillRect(
+x-gap*.28,
+top,
+gap*.56,
+h
+);
 
 });
 
@@ -1941,6 +2792,7 @@ ctx.fillRect(x-gap*.28,top,gap*.56,h);
 function drawMainChart(){
 
 const canvas=document.getElementById("mainCanvas");
+
 if(!canvas)return;
 
 const {ctx,width,height}=setupCanvas(canvas);
@@ -1951,8 +2803,10 @@ let value=3950;
 const points=[];
 
 for(let i=0;i<60;i++){
+
 value+=(Math.random()-.46)*50;
 points.push(value);
+
 }
 
 const min=Math.min(...points);
@@ -1960,12 +2814,15 @@ const max=Math.max(...points);
 
 ctx.strokeStyle="#36d399";
 ctx.lineWidth=2;
+
 ctx.beginPath();
 
 points.forEach((p,i)=>{
 
 const x=i/(points.length-1)*width;
-const y=height-((p-min)/(max-min))*(height-20)-10;
+
+const y=
+height-((p-min)/(max-min))*(height-20)-10;
 
 if(i===0)ctx.moveTo(x,y);
 else ctx.lineTo(x,y);
@@ -1976,7 +2833,9 @@ ctx.stroke();
 
 }
 
-/* ================= RESET ================= */
+/* =========================================================
+   RESET
+========================================================= */
 
 function resetSimulator(){
 
@@ -2005,7 +2864,9 @@ alert("Simulator reset.");
 
 }
 
-/* ================= START ================= */
+/* =========================================================
+   START
+========================================================= */
 
 if(currentUser()){
 loadData();
@@ -2013,7 +2874,10 @@ openApp();
 }
 
 window.addEventListener("resize",()=>{
-if(selectedStock)drawChart(selectedStock.price);
+
+if(selectedStock)
+drawChart(selectedStock.price);
+
 });
 
 </script>
